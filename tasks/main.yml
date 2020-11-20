@@ -1,0 +1,94 @@
+---
+- include_tasks: is_systemd.yml
+
+# Variable configuration.
+- include_tasks: variables.yml
+
+
+- name: Ensure PlantUML Python libraries are installed.
+  apt:
+    name: "{{ plantuml_python_library }}"
+    state: present
+
+- name: Ensure PlantUML packages are installed.
+  apt:
+    name: "{{ plantuml_packages }}"
+    state: present
+
+
+
+
+- name: Get installed version.
+  command:  java -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar -version
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: plantuml_installed_version
+
+    # The \s\S regex allows the match of any character and also \n 'newline'.
+    # This is to allow the complete match to the end a string with embedded '\n'.
+    # Normal '.*' does not match '\n'
+- name: Flag new installation
+  set_fact:
+    new_plantuml_install: true
+  when:
+    - (plantuml_installed_version.rc != 0) or (plantuml_installed_version.stdout | regex_replace("^PlantUML version ([0-9A-Za-z]+) [\s\S]*$", "\\1") is not match(plantuml_version))
+
+- name: Ensure install dest exists
+  file:
+    path: "{{ plantuml_dest }}"
+    state: directory
+    mode: 0755
+    recurse: true
+  when:
+    - new_plantuml_install is defined
+    - new_plantuml_install
+
+- name: Get the jar
+  get_url:
+    url: "{{ plantuml_url }}"
+    dest: "{{ plantuml_dest }}/plantuml.jar"
+    mode: 0755
+  register: install_plantuml
+  until: install_plantuml is succeeded
+  retries: 3
+  when:
+    - new_plantuml_install is defined
+    - new_plantuml_install
+
+    # mkdir -p /usr/share/plantuml
+    # curl -L https://sourceforge.net/projects/plantuml/files/plantuml.1.2019.8.jar/download -o /usr/share/plantuml/plantuml.jar
+    # java -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar -version
+    # cp _ext/plantuml /usr/share/plantuml/
+    # chmod a+x /usr/share/plantuml/plantuml
+    # cp style*.iuml /usr/share/plantuml/
+    # export PATH=$PATH:/usr/share/plantuml
+
+
+- name: copy script to start plantuml
+  copy:
+    src: scripts/plantuml
+    dest: "{{ plantuml_dest }}/plantuml"
+    owner: root
+    group: staff
+    mode: u=xrw,g=xr,o=xr
+
+
+- name: copy styles
+  copy:
+    src: styles/
+    dest: "{{ plantuml_dest }}/"
+    owner: root
+    group: staff
+    mode: u=rw,g=r,o=r
+
+
+- name: Configure plantuml env
+  copy:
+    dest: /etc/profile.d/plantuml.sh
+    content: |
+      PATH="$PATH:{{ plantuml_dest }}"
+    mode: u=xrw,g=rx,o=rx
+  when:
+    - new_plantuml_install is defined
+    - new_plantuml_install

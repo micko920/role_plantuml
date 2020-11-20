@@ -1,0 +1,9 @@
+---
+
+plantuml_version: "1.2019.8"
+# plantuml_version: "8040beta0"
+plantuml_url: "https://sourceforge.net/projects/plantuml/files/plantuml.1.2019.8.jar"
+plantuml_dest: "/usr/share/plantuml"
+plantuml_python_library: []
+plantuml_packages:
+  - graphviz

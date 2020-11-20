@@ -1,0 +1,37 @@
+#!/bin/sh
+# PlantUML Launcher
+#
+# This script is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This script distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
+# You should have received a copy of the GNU General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+# USA.
+#
+# Copyright (C) 2010 Ilya Paramonov <ivparamonov@gmail.com>
+
+if [ -n "${JAVA_HOME}" ] && [ -x "${JAVA_HOME}/bin/java" ] ; then
+    JAVA="${JAVA_HOME}/bin/java"
+elif [ -x /usr/bin/java ] ; then
+    JAVA=/usr/bin/java
+elif [ -x /opt/openjdk-12/bin/java ] ; then
+    JAVA_HOME=/opt/openjdk-12
+    JAVA="${JAVA_HOME}/bin/java"
+else
+    echo Cannot find JVM
+    exit 1
+fi
+
+#SKIN_STYLE_FILE=/usr/share/plantuml/stylesheet.iuml
+#    -config $SKIN_STYLE_FILE \
+$JAVA \
+    -Dplantuml.include.path="/usr/share/plantuml" \
+    -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar \
+    ${@}
