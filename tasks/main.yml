@@ -80,7 +80,7 @@
     dest: "{{ item.dest }}"
     state: link
   loop:
-    - { src: '/usr/local/share/plantuml/plantuml', dest: '/usr/local/bin/plantuml' }
+    - { src: '{{ plantuml_dest }}/plantuml', dest: '/usr/local/bin/plantuml' }
   loop_control:
     label: "{{ item.dest }}"
   when:
