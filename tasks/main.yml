@@ -74,6 +74,19 @@
     mode: u=xrw,g=xr,o=xr
 
 
+- name: setup links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: '/usr/local/share/plantuml/plantuml', dest: '/usr/local/bin/plantuml' }
+  loop_control:
+    label: "{{ item.dest }}"
+  when:
+    - new_plantuml_install is defined
+    - new_plantuml_install
+
 - name: copy styles
   copy:
     src: styles/
@@ -81,14 +94,10 @@
     owner: root
     group: staff
     mode: u=rw,g=r,o=r
-
-
-- name: Configure plantuml env
-  copy:
-    dest: /etc/profile.d/plantuml.sh
-    content: |
-      PATH="$PATH:{{ plantuml_dest }}"
-    mode: u=xrw,g=rx,o=rx
   when:
     - new_plantuml_install is defined
     - new_plantuml_install
+
+- name: Flag new installation complete
+  set_fact:
+    new_plantuml_install: false
