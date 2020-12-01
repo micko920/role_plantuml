@@ -1,7 +1,7 @@
 ---
 
-plantuml_version: "1.2020.20"
-plantuml_url: "https://sourceforge.net/projects/plantuml/files/plantuml.1.2020.20.jar"
+plantuml_version: "1.2020.21"
+plantuml_url: "https://sourceforge.net/projects/plantuml/files/plantuml.{{ plantuml_version }}.jar"
 plantuml_dest: "/usr/share/plantuml"
 plantuml_python_library: []
 plantuml_packages:
