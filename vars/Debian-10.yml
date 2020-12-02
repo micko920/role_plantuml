@@ -5,4 +5,4 @@ plantuml_url: "https://sourceforge.net/projects/plantuml/files/plantuml.{{ plant
 plantuml_dest: "/usr/share/plantuml"
 plantuml_python_library: []
 plantuml_packages:
-  - graphviz
+  - "http://archive.ubuntu.com/ubuntu/pool/main/g/graphviz/graphviz_2.38.0-12ubuntu2_amd64.deb"

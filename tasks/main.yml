@@ -12,8 +12,9 @@
 
 - name: Ensure PlantUML packages are installed.
   apt:
-    name: "{{ plantuml_packages }}"
+    deb: "{{ item }}"
     state: present
+  loop: "{{ plantuml_packages }}"
 
 
 
