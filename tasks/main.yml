@@ -12,10 +12,14 @@
 
 - name: Ensure PlantUML packages are installed.
   apt:
+    name: "{{ plantuml_packages }}"
+    state: present
+
+- name: Ensure Graphviz packages are installed.
+  apt:
     deb: "{{ item }}"
     state: present
-  loop: "{{ plantuml_packages }}"
-
+  loop: "{{ graphviz_packages }}"
 
 
 

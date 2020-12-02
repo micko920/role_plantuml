@@ -4,5 +4,7 @@ plantuml_version: "1.2020.21"
 plantuml_url: "https://sourceforge.net/projects/plantuml/files/plantuml.{{ plantuml_version }}.jar"
 plantuml_dest: "/usr/share/plantuml"
 plantuml_python_library: []
-plantuml_packages:
+plantuml_packages: []
+
+graphviz_packages:
   - "http://archive.ubuntu.com/ubuntu/pool/main/g/graphviz/graphviz_2.38.0-12ubuntu2_amd64.deb"
