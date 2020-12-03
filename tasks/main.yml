@@ -15,14 +15,6 @@
     name: "{{ plantuml_packages }}"
     state: present
 
-- name: Ensure Graphviz packages are installed.
-  apt:
-    deb: "{{ item }}"
-    state: present
-  loop: "{{ graphviz_packages }}"
-
-
-
 - name: Get installed version.
   command:  java -Djava.awt.headless=true -jar /usr/share/plantuml/plantuml.jar -version
   changed_when: false
